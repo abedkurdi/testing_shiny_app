@@ -36,14 +36,22 @@ ui <- dashboardPage(
     ),
     fluidRow(
       # Clicking this will increment the progress amount
-      box(width = 6, ggiraphOutput("plot")),
-      box(width = 6, ggiraphOutput("plot1"))
+      box(width = 12, ggiraphOutput("plot"))
+    ),
+
+    fluidRow(
+      # Clicking this will increment the progress amount
+      box(width = 12, ggiraphOutput("plot1"))
     ),
     
     fluidRow(
       # Clicking this will increment the progress amount
-      box(width = 6, ggiraphOutput("plot2")),
-      box(width = 6, ggiraphOutput("plot3"))
+      box(width = 12, ggiraphOutput("plot2"))
+    ),
+
+    fluidRow(
+      # Clicking this will increment the progress amount
+      box(width = 12, ggiraphOutput("plot3"))
     )
     #fluidRow(
     #  # Clicking this will increment the progress amount
@@ -63,25 +71,25 @@ server <- function(input, output) {
     output$plot <- renderggiraph({
       p <- ggplot(data, aes(x=ST, fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
       #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
-      ggiraph(code = print(p))    
+      ggiraph(code = print(p), width_svg = 12)    
   })
 
   output$plot1 <- renderggiraph({
     p1 <- ggplot(data, aes(x=Year, fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
       #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
-      ggiraph(code = print(p1))
+      ggiraph(code = print(p1), width_svg = 12)
   })
 
   output$plot2 <- renderggiraph({
     p1 <- ggplot(data, aes(x=Meropenem..R..19., fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
       #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
-      ggiraph(code = print(p1))
+      ggiraph(code = print(p1), width_svg = 12)
   })
 
   output$plot3 <- renderggiraph({
     p1 <- ggplot(data, aes(x=Gentamicin..R..12., fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
       #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
-      ggiraph(code = print(p1))
+      ggiraph(code = print(p1), width_svg = 12)
   })
 
   output$info <- renderPrint({

@@ -9,7 +9,7 @@ library(ggiraph)
 library(ggplot2)
 
 # reference: https://rstudio.github.io/shinydashboard/structure.html
-data <- read.csv("sal_analysis.csv", sep='\t', stringsAsFactors=FALSE, header=TRUE)
+data <- read.csv("https://raw.githubusercontent.com/abedkurdi/testing_shiny_app/master/docs/sal_analysis.csv", sep='\t', stringsAsFactors=FALSE, header=TRUE)
 unique(data$Serovar)
 data$Serovar <- gsub("\\s","",data$Serovar)
 

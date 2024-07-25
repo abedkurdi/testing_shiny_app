@@ -6,9 +6,10 @@ options(shiny.host = "0.0.0.0")
 #options(shiny.maxRequestSize=50*1024^2)
 options(shiny.usecairo=T)
 library(ggiraph)
+library(ggplot2)
 
 # reference: https://rstudio.github.io/shinydashboard/structure.html
-data <- read.csv("~/Downloads/sal_analysis.csv", sep='\t', stringsAsFactors=FALSE, header=TRUE)
+data <- read.csv("sal_analysis.csv", sep='\t', stringsAsFactors=FALSE, header=TRUE)
 unique(data$Serovar)
 data$Serovar <- gsub("\\s","",data$Serovar)
 

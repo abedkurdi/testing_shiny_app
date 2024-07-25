@@ -5,13 +5,18 @@ options(shiny.port = 5539)
 options(shiny.host = "0.0.0.0")
 #options(shiny.maxRequestSize=50*1024^2)
 options(shiny.usecairo=T)
+library(ggiraph)
 
 # reference: https://rstudio.github.io/shinydashboard/structure.html
+data <- read.csv("~/Downloads/sal_analysis.csv", sep='\t', stringsAsFactors=FALSE, header=TRUE)
+unique(data$Serovar)
+data$Serovar <- gsub("\\s","",data$Serovar)
+
 
 ui <- dashboardPage(
-  dashboardHeader(title = "Epidemiology"),
+  dashboardHeader(title = "TEST"),
   dashboardSidebar(
-    selectInput("bacteria", "Select a Bacteria", choices = c("Acinetobacter baumannii", "Escherichia coli", "Klibsiella pneumoniae")),
+    selectInput("bacteria", "Select a Bacteria", choices = c("Acinetobacter baumannii", "Escherichia coli", "Klebsiella pneumoniae")),
     selectInput("filter1", "filter1", choices = c("option1", "option2", "option3")),
     selectInput("filter2", "filter2", choices = c("option1", "option2", "option3")),
     selectInput("filter3", "filter3", choices = c("option1", "option2", "option3"))
@@ -30,14 +35,19 @@ ui <- dashboardPage(
     ),
     fluidRow(
       # Clicking this will increment the progress amount
-      box(width = 12, plotOutput("plot", click = "plot_click"),
-  verbatimTextOutput("info"))
+      box(width = 6, ggiraphOutput("plot")),
+      box(width = 6, ggiraphOutput("plot1"))
     ),
     
     fluidRow(
       # Clicking this will increment the progress amount
-      box(width = 12, actionButton("count", "Increment progress"))
+      box(width = 6, ggiraphOutput("plot2")),
+      box(width = 6, ggiraphOutput("plot3"))
     )
+    #fluidRow(
+    #  # Clicking this will increment the progress amount
+    #  box(width = 12, actionButton("count", "Increment progress"))
+    #)
   )
 )
 
@@ -49,9 +59,29 @@ server <- function(input, output) {
     )
   })
 
-    output$plot <- renderPlot({
-    plot(mtcars$wt, mtcars$mpg)
-  }, res = 96)
+    output$plot <- renderggiraph({
+      p <- ggplot(data, aes(x=ST, fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
+      #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
+      ggiraph(code = print(p))    
+  })
+
+  output$plot1 <- renderggiraph({
+    p1 <- ggplot(data, aes(x=Year, fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
+      #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
+      ggiraph(code = print(p1))
+  })
+
+  output$plot2 <- renderggiraph({
+    p1 <- ggplot(data, aes(x=Meropenem..R..19., fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
+      #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
+      ggiraph(code = print(p1))
+  })
+
+  output$plot3 <- renderggiraph({
+    p1 <- ggplot(data, aes(x=Gentamicin..R..12., fill=Serovar))+geom_bar_interactive(aes(tooltip = Serovar), position=position_dodge2(width=0.5, preserve="single"))+ theme_minimal()+theme(axis.text.x = element_text(angle = 45, hjust=1, size=8.5), legend.position="none")
+      #x <- girafe(ggobj = p, width_svg = 10, height_svg = 5) %>% girafe_options(opts_hover(css = "color:cyan;"))
+      ggiraph(code = print(p1))
+  })
 
   output$info <- renderPrint({
     req(input$plot_click)
